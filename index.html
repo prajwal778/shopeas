@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEase – Smart Order Management System</title>
+  <meta name="description" content="ShopEase is a premium e-commerce platform with smart order management, 36+ products across 6 categories, and a DSA-powered pending order system.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Toast Container -->
+<div id="toast-container" aria-live="polite"></div>
+
+<!-- Cart Drawer Overlay -->
+<div id="cart-overlay" class="cart-overlay" onclick="closeCart()"></div>
+
+<!-- Cart Drawer -->
+<aside id="cart-drawer" class="cart-drawer" aria-label="Shopping cart">
+  <div class="cart-header">
+    <h2 class="cart-title"><i class="fa-solid fa-bag-shopping"></i> Your Cart <span class="cart-count-badge" id="cart-drawer-count">0</span></h2>
+    <button class="cart-close-btn" onclick="closeCart()" aria-label="Close cart"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="cart-body" id="cart-body">
+    <!-- Cart items injected here -->
+  </div>
+  <div class="cart-footer" id="cart-footer">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span id="cart-subtotal">₹0</span>
+    </div>
+    <div class="cart-actions">
+      <button class="btn-checkout" id="checkout-btn">Proceed to Checkout <i class="fa-solid fa-arrow-right"></i></button>
+      <button class="btn-clear-cart" onclick="clearCart()">Clear Cart</button>
+    </div>
+  </div>
+</aside>
+
+<!-- Sticky Navigation -->
+<header class="navbar" id="navbar">
+  <div class="nav-container">
+    <!-- Logo -->
+    <a href="#" class="nav-logo" aria-label="ShopEase Home">
+      <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+      <span class="logo-text">Shop<span class="logo-accent">Ease</span></span>
+    </a>
+
+    <!-- Search Bar -->
+    <div class="search-wrapper">
+      <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="search" id="nav-search" placeholder="Search products, brands…" autocomplete="off" aria-label="Search products">
+        <button class="search-clear-btn" id="search-clear-btn" aria-label="Clear search"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    </div>
+
+    <!-- Nav Actions -->
+    <div class="nav-actions">
+      <a href="#categories" class="nav-action-btn" aria-label="Categories">
+        <i class="fa-solid fa-grid-2"></i>
+        <span class="nav-action-label">Categories</span>
+      </a>
+      <button class="nav-action-btn wishlist-nav-btn" onclick="scrollToProducts()" aria-label="Wishlist">
+        <i class="fa-regular fa-heart"></i>
+        <span class="nav-action-label">Wishlist</span>
+        <span class="action-badge" id="wishlist-badge" style="display:none">0</span>
+      </button>
+      <button class="nav-action-btn" aria-label="Account">
+        <i class="fa-regular fa-user"></i>
+        <span class="nav-action-label">Account</span>
+      </button>
+      <button class="nav-action-btn cart-nav-btn" onclick="openCart()" aria-label="Cart" id="cart-nav-btn">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="nav-action-label">Cart</span>
+        <span class="action-badge" id="cart-badge" style="display:none">0</span>
+      </button>
+    </div>
+
+    <!-- Mobile menu toggle -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- ============================================================ -->
+  <!-- HERO SECTION -->
+  <!-- ============================================================ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-badge animate-fade-up" style="animation-delay:0.1s">
+          <i class="fa-solid fa-star"></i> India's Favourite Tech Store
+        </div>
+        <h1 class="hero-title animate-fade-up" style="animation-delay:0.2s">
+          Shop Smarter,<br><span class="gradient-text">Live Better</span>
+        </h1>
+        <p class="hero-subtitle animate-fade-up" style="animation-delay:0.3s">
+          Discover premium gadgets, electronics, and accessories at unbeatable prices. 
+          Fast delivery. Easy returns. Real savings.
+        </p>
+        <div class="hero-cta animate-fade-up" style="animation-delay:0.4s">
+          <button class="btn-primary" onclick="scrollToProducts()">
+            <i class="fa-solid fa-bag-shopping"></i> Shop Now
+          </button>
+          <a href="#dsa-section" class="btn-outline">
+            <i class="fa-solid fa-code"></i> View DSA Demo
+          </a>
+        </div>
+        <div class="hero-stats animate-fade-up" style="animation-delay:0.5s">
+          <div class="stat-item">
+            <strong class="stat-num" data-target="36">0</strong><span>+</span>
+            <span class="stat-label">Products</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <strong class="stat-num" data-target="4800">0</strong><span>+</span>
+            <span class="stat-label">Happy Customers</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <strong class="stat-num" data-target="6">0</strong><span></span>
+            <span class="stat-label">Categories</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual animate-fade-in" style="animation-delay:0.3s">
+        <div class="floating-cards">
+          <div class="float-card fc-1">
+            <i class="fa-solid fa-headphones"></i>
+            <span>₹8,990</span>
+          </div>
+          <div class="float-card fc-2">
+            <i class="fa-brands fa-apple"></i>
+            <span>₹99,900</span>
+          </div>
+          <div class="float-card fc-3">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <span>₹74,999</span>
+          </div>
+          <div class="float-card fc-4">
+            <i class="fa-solid fa-gamepad"></i>
+            <span>₹1,799</span>
+          </div>
+          <div class="float-card fc-5">
+            <i class="fa-solid fa-watch"></i>
+            <span>₹24,900</span>
+          </div>
+          <div class="hero-main-visual">
+            <i class="fa-solid fa-bolt hero-bolt"></i>
+            <div class="hero-ring ring-1"></div>
+            <div class="hero-ring ring-2"></div>
+            <div class="hero-ring ring-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PROMO BANNER -->
+  <!-- ============================================================ -->
+  <div class="promo-banner">
+    <div class="promo-track">
+      <span><i class="fa-solid fa-truck-fast"></i> Free Shipping on orders above ₹999</span>
+      <span><i class="fa-solid fa-shield-halved"></i> 1-Year Warranty on all Electronics</span>
+      <span><i class="fa-solid fa-rotate-left"></i> 30-Day Easy Returns</span>
+      <span><i class="fa-solid fa-percent"></i> Up to 40% OFF on Top Brands</span>
+      <span><i class="fa-solid fa-credit-card"></i> No-Cost EMI Available</span>
+      <span><i class="fa-solid fa-truck-fast"></i> Free Shipping on orders above ₹999</span>
+      <span><i class="fa-solid fa-shield-halved"></i> 1-Year Warranty on all Electronics</span>
+      <span><i class="fa-solid fa-rotate-left"></i> 30-Day Easy Returns</span>
+      <span><i class="fa-solid fa-percent"></i> Up to 40% OFF on Top Brands</span>
+      <span><i class="fa-solid fa-credit-card"></i> No-Cost EMI Available</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- CATEGORY CARDS -->
+  <!-- ============================================================ -->
+  <section class="section categories-section" id="categories">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Shop by <span class="gradient-text">Category</span></h2>
+        <p class="section-subtitle">Explore our wide range of premium tech products</p>
+      </div>
+      <div class="categories-grid reveal">
+        <button class="category-card active" data-category="all" aria-label="All products">
+          <div class="cat-icon"><i class="fa-solid fa-store"></i></div>
+          <span class="cat-name">All Products</span>
+          <span class="cat-count" id="cat-count-all">36</span>
+        </button>
+        <button class="category-card" data-category="audio" aria-label="Audio products">
+          <div class="cat-icon"><i class="fa-solid fa-headphones"></i></div>
+          <span class="cat-name">Audio</span>
+          <span class="cat-count" id="cat-count-audio">6</span>
+        </button>
+        <button class="category-card" data-category="computing" aria-label="Computing products">
+          <div class="cat-icon"><i class="fa-solid fa-laptop"></i></div>
+          <span class="cat-name">Computing</span>
+          <span class="cat-count" id="cat-count-computing">6</span>
+        </button>
+        <button class="category-card" data-category="gaming" aria-label="Gaming products">
+          <div class="cat-icon"><i class="fa-solid fa-gamepad"></i></div>
+          <span class="cat-name">Gaming</span>
+          <span class="cat-count" id="cat-count-gaming">6</span>
+        </button>
+        <button class="category-card" data-category="mobile" aria-label="Mobile products">
+          <div class="cat-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+          <span class="cat-name">Mobile</span>
+          <span class="cat-count" id="cat-count-mobile">6</span>
+        </button>
+        <button class="category-card" data-category="wearables" aria-label="Wearables">
+          <div class="cat-icon"><i class="fa-solid fa-watch"></i></div>
+          <span class="cat-name">Wearables</span>
+          <span class="cat-count" id="cat-count-wearables">6</span>
+        </button>
+        <button class="category-card" data-category="desk-setup" aria-label="Desk Setup">
+          <div class="cat-icon"><i class="fa-solid fa-desktop"></i></div>
+          <span class="cat-name">Desk Setup</span>
+          <span class="cat-count" id="cat-count-desk-setup">6</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PRODUCTS SECTION -->
+  <!-- ============================================================ -->
+  <section class="section products-section" id="products">
+    <div class="container">
+      <!-- Products Header & Controls -->
+      <div class="products-header reveal">
+        <div class="products-header-left">
+          <h2 class="section-title">Featured <span class="gradient-text">Products</span></h2>
+          <p class="products-result-count" id="result-count">Showing 36 products</p>
+        </div>
+        <div class="products-controls">
+          <div class="sort-wrapper">
+            <label for="sort-select" class="sr-only">Sort products</label>
+            <select id="sort-select" class="sort-select" aria-label="Sort products">
+              <option value="default">Sort: Default</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating">Top Rated</option>
+              <option value="newest">Newest First</option>
+            </select>
+          </div>
+          <button class="view-toggle active" id="view-grid-btn" aria-label="Grid view" onclick="setView('grid')">
+            <i class="fa-solid fa-grid-2"></i>
+          </button>
+          <button class="view-toggle" id="view-list-btn" aria-label="List view" onclick="setView('list')">
+            <i class="fa-solid fa-list"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" id="products-grid">
+        <!-- Product cards injected by JS -->
+      </div>
+
+      <!-- No Results Message -->
+      <div class="no-results" id="no-results" style="display:none">
+        <div class="no-results-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <h3>No products found</h3>
+        <p>Try a different search term or category</p>
+        <button class="btn-primary" onclick="resetFilters()">Clear Filters</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- DSA LINKED LIST SECTION -->
+  <!-- ============================================================ -->
+  <section class="section dsa-section" id="dsa-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="dsa-badge"><i class="fa-solid fa-code"></i> DSA Assignment</div>
+        <h2 class="section-title">Pending Order <span class="gradient-text">Management</span></h2>
+        <p class="section-subtitle">
+          ShopEase maintains a <strong>singly linked list</strong> of pending orders. 
+          An order is removed based on its position counted backward from the most recently placed order.
+        </p>
+      </div>
+
+      <div class="dsa-layout reveal">
+        <!-- LEFT: Controls & Explanation -->
+        <div class="dsa-controls-panel">
+          <div class="dsa-problem-box glass-card">
+            <h3><i class="fa-solid fa-lightbulb"></i> Problem Statement</h3>
+            <p>
+              An online shopping application maintains a linked list of pending orders. 
+              Remove the <strong>n<sup>th</sup> node from the end</strong> of the linked list in one pass.
+            </p>
+            <div class="complexity-badges">
+              <span class="complexity-badge time"><i class="fa-solid fa-clock"></i> Time: O(N)</span>
+              <span class="complexity-badge space"><i class="fa-solid fa-memory"></i> Space: O(1)</span>
+            </div>
+          </div>
+
+          <div class="dsa-controls glass-card">
+            <h3><i class="fa-solid fa-sliders"></i> Controls</h3>
+            <div class="dsa-input-group">
+              <div class="input-row">
+                <div class="dsa-field">
+                  <label for="order-name">Product Name</label>
+                  <input type="text" id="order-name" placeholder="e.g. Sony Headphones" maxlength="40">
+                </div>
+                <div class="dsa-field">
+                  <label for="order-price">Price (₹)</label>
+                  <input type="number" id="order-price" placeholder="e.g. 8990" min="1">
+                </div>
+              </div>
+              <button class="dsa-btn add-btn" id="add-order-btn" onclick="addOrder()">
+                <i class="fa-solid fa-plus"></i> Add Order
+              </button>
+            </div>
+            <div class="dsa-field">
+              <label for="delete-n">Delete n<sup>th</sup> from End (n)</label>
+              <div class="n-input-row">
+                <input type="number" id="delete-n" placeholder="Enter n" min="1" id="n-input">
+                <button class="dsa-btn delete-btn" onclick="deleteNthFromEnd()">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+              </div>
+              <div class="dsa-error" id="dsa-error"></div>
+            </div>
+            <div class="dsa-btn-row">
+              <button class="dsa-btn demo-btn" onclick="addDemoOrder()">
+                <i class="fa-solid fa-magic-wand-sparkles"></i> Add Demo Order
+              </button>
+              <button class="dsa-btn reset-btn" onclick="resetLinkedList()">
+                <i class="fa-solid fa-rotate-right"></i> Reset Demo
+              </button>
+            </div>
+          </div>
+
+          <div class="dsa-stats glass-card">
+            <div class="stat-row">
+              <span><i class="fa-solid fa-list-ol"></i> Pending Orders</span>
+              <strong id="list-length">0</strong>
+            </div>
+            <div class="stat-row" id="deleted-order-info" style="display:none">
+              <span><i class="fa-solid fa-trash-can"></i> Last Deleted</span>
+              <strong id="deleted-order-name">—</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Visualizer -->
+        <div class="dsa-visualizer-panel">
+          <div class="dsa-vis-header">
+            <h3><i class="fa-solid fa-diagram-project"></i> Linked List Visualizer</h3>
+            <div class="pointer-legend">
+              <span class="legend-fast"><span class="dot fast-dot"></span> Fast Pointer</span>
+              <span class="legend-slow"><span class="dot slow-dot"></span> Slow Pointer</span>
+              <span class="legend-del"><span class="dot del-dot"></span> Node to Delete</span>
+            </div>
+          </div>
+
+          <div class="ll-container" id="ll-container">
+            <div class="empty-ll">
+              <i class="fa-solid fa-link-slash"></i>
+              <p>No orders yet. Add some demo orders to get started!</p>
+            </div>
+          </div>
+
+          <div class="dsa-algorithm glass-card">
+            <h4><i class="fa-solid fa-sitemap"></i> Two-Pointer Algorithm (One Pass)</h4>
+            <div class="algo-steps">
+              <div class="algo-step" id="step-1">
+                <span class="step-num">1</span>
+                <span>Create a <code>dummy</code> node pointing to <code>head</code></span>
+              </div>
+              <div class="algo-step" id="step-2">
+                <span class="step-num">2</span>
+                <span>Set both <code>fast</code> and <code>slow</code> to <code>dummy</code></span>
+              </div>
+              <div class="algo-step" id="step-3">
+                <span class="step-num">3</span>
+                <span>Advance <code>fast</code> by <strong>n+1</strong> steps</span>
+              </div>
+              <div class="algo-step" id="step-4">
+                <span class="step-num">4</span>
+                <span>Move both pointers until <code>fast == NULL</code></span>
+              </div>
+              <div class="algo-step" id="step-5">
+                <span class="step-num">5</span>
+                <span>Delete <code>slow.next</code> — that's the n<sup>th</sup> from end</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FEATURES STRIP -->
+  <!-- ============================================================ -->
+  <section class="features-strip reveal">
+    <div class="container">
+      <div class="features-grid">
+        <div class="feature-item">
+          <i class="fa-solid fa-truck-fast"></i>
+          <div>
+            <strong>Free Delivery</strong>
+            <span>On orders above ₹999</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-shield-halved"></i>
+          <div>
+            <strong>Secure Payment</strong>
+            <span>100% encrypted transactions</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-rotate-left"></i>
+          <div>
+            <strong>Easy Returns</strong>
+            <span>30-day hassle-free returns</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <i class="fa-solid fa-headset"></i>
+          <div>
+            <strong>24/7 Support</strong>
+            <span>Always here to help</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo footer-logo">
+          <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+          <span class="logo-text">Shop<span class="logo-accent">Ease</span></span>
+        </a>
+        <p class="footer-tagline">Your one-stop destination for premium electronics and smart gadgets.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-links-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#categories">Categories</a></li>
+          <li><a href="#products">Products</a></li>
+          <li><a href="#dsa-section">DSA Demo</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-col">
+        <h4>Categories</h4>
+        <ul>
+          <li><a href="#" onclick="filterByCategory('audio')">Audio & Speakers</a></li>
+          <li><a href="#" onclick="filterByCategory('computing')">Laptops & Computing</a></li>
+          <li><a href="#" onclick="filterByCategory('gaming')">Gaming</a></li>
+          <li><a href="#" onclick="filterByCategory('mobile')">Mobile & Accessories</a></li>
+          <li><a href="#" onclick="filterByCategory('wearables')">Wearables</a></li>
+          <li><a href="#" onclick="filterByCategory('desk-setup')">Desk Setup</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Track Order</a></li>
+          <li><a href="#">Returns & Refunds</a></li>
+          <li><a href="#">Warranty</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-newsletter">
+        <h4>Stay Updated</h4>
+        <p>Get exclusive deals and product launches straight to your inbox.</p>
+        <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+          <input type="email" placeholder="Your email address" required aria-label="Email for newsletter">
+          <button type="submit" class="btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ShopEase. All rights reserved. | Built with ❤️ for CE students.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
